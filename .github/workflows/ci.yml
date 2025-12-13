@@ -29,7 +29,7 @@ jobs:
             julia-version: '1.9'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Julia
         uses: julia-actions/setup-julia@v2
@@ -57,7 +57,7 @@ jobs:
     name: SPDX & Documentation Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check SPDX headers
         run: |
@@ -96,7 +96,7 @@ jobs:
     permissions:
       security-events: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check for secrets
         uses: trufflesecurity/trufflehog@main
