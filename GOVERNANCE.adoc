@@ -1,0 +1,64 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2025 hyperpolymath
+= git-seo Governance
+:toc:
+
+== Project Structure
+
+=== Maintainers
+
+Primary maintainer: hyperpolymath
+
+Responsibilities:
+
+* Merge requests review and approval
+* Release management
+* Security response
+* Community moderation
+
+=== Decision Making
+
+==== Minor Changes
+
+Documentation fixes, small bug fixes, and minor improvements can be merged by any maintainer after passing CI.
+
+==== Significant Changes
+
+New features, API changes, and architectural decisions require:
+
+1. Issue discussion
+2. Design proposal (for complex features)
+3. Maintainer approval
+4. Community feedback period (7 days for significant changes)
+
+==== Breaking Changes
+
+Breaking changes require:
+
+1. RFC (Request for Comments) issue
+2. 14-day feedback period
+3. Migration guide
+4. Version bump (SemVer major)
+
+== Release Process
+
+1. Changelog update
+2. Version bump in `Project.toml`
+3. Tag creation with signed commit
+4. Release notes publication
+
+== Succession Planning
+
+In the event the primary maintainer is unable to continue:
+
+1. Repository ownership transfers to Rhodium Standard organization
+2. Active contributors may apply for maintainer status
+3. Community vote if multiple candidates
+
+== Code of Conduct Enforcement
+
+See link:CODE_OF_CONDUCT.adoc[Code of Conduct] for enforcement procedures.
+
+== Amendments
+
+This governance document may be amended through the Significant Changes process.

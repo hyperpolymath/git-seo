@@ -1,0 +1,157 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 hyperpolymath
+
+stages:
+  - validate
+  - test
+  - security
+  - release
+
+variables:
+  JULIA_VERSION: "1.10"
+
+# Cache Julia packages
+.julia-cache: &julia-cache
+  cache:
+    key: julia-${JULIA_VERSION}
+    paths:
+      - .julia/
+
+# ==============================================================================
+# Validation Stage
+# ==============================================================================
+
+spdx-check:
+  stage: validate
+  image: alpine:latest
+  script:
+    - |
+      missing=0
+      for file in src/*.jl bin/git-seo; do
+        if ! head -3 "$file" | grep -q "SPDX-License-Identifier"; then
+          echo "Missing SPDX header: $file"
+          missing=$((missing + 1))
+        fi
+      done
+      if [ $missing -gt 0 ]; then
+        echo "ERROR: $missing files missing SPDX headers"
+        exit 1
+      fi
+      echo "All source files have SPDX headers"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+docs-check:
+  stage: validate
+  image: alpine:latest
+  script:
+    - |
+      required_files="README.adoc LICENSE.txt SECURITY.md CODE_OF_CONDUCT.adoc CONTRIBUTING.adoc"
+      for file in $required_files; do
+        if [ ! -f "$file" ]; then
+          echo "ERROR: Missing required file: $file"
+          exit 1
+        fi
+      done
+      echo "All required documentation present"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+wellknown-check:
+  stage: validate
+  image: alpine:latest
+  script:
+    - |
+      wellknown_files=".well-known/security.txt .well-known/humans.txt .well-known/ai.txt"
+      for file in $wellknown_files; do
+        if [ ! -f "$file" ]; then
+          echo "ERROR: Missing: $file"
+          exit 1
+        fi
+      done
+      echo ".well-known directory complete"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# ==============================================================================
+# Test Stage
+# ==============================================================================
+
+test:julia-1.9:
+  stage: test
+  image: julia:1.9
+  <<: *julia-cache
+  script:
+    - julia --project=. -e 'using Pkg; Pkg.instantiate()'
+    - julia --project=. -e 'using Pkg; Pkg.test()'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+test:julia-1.10:
+  stage: test
+  image: julia:1.10
+  <<: *julia-cache
+  script:
+    - julia --project=. -e 'using Pkg; Pkg.instantiate()'
+    - julia --project=. -e 'using Pkg; Pkg.test()'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# ==============================================================================
+# Security Stage
+# ==============================================================================
+
+secret-scan:
+  stage: security
+  image: alpine:latest
+  script:
+    - |
+      # Check for potential secrets
+      if grep -rn "password\s*=\s*['\"]" src/ bin/ 2>/dev/null; then
+        echo "ERROR: Potential hardcoded credentials found"
+        exit 1
+      fi
+      if grep -rn "api_key\s*=\s*['\"]" src/ bin/ 2>/dev/null; then
+        echo "ERROR: Potential hardcoded API keys found"
+        exit 1
+      fi
+      echo "No obvious credential leaks found"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+https-check:
+  stage: security
+  image: alpine:latest
+  script:
+    - |
+      # Check for non-HTTPS URLs (excluding localhost/examples)
+      http_urls=$(grep -rn "http://" src/ bin/ --include="*.jl" | grep -v "localhost\|127.0.0.1\|example" || true)
+      if [ -n "$http_urls" ]; then
+        echo "WARNING: Found non-HTTPS URLs:"
+        echo "$http_urls"
+      fi
+      echo "HTTPS check complete"
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# ==============================================================================
+# Release Stage
+# ==============================================================================
+
+release:
+  stage: release
+  image: julia:1.10
+  script:
+    - julia --project=. -e 'using Pkg; Pkg.instantiate()'
+    - julia --project=. -e 'using Pkg; Pkg.precompile()'
+    - echo "Release preparation complete"
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$/'

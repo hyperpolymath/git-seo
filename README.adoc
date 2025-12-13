@@ -1,0 +1,201 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2025 hyperpolymath
+= git-seo
+:toc: left
+:toclevels: 2
+:icons: font
+:source-highlighter: rouge
+
+image::https://img.shields.io/badge/RSR-Bronze-cd7f32[RSR Compliance]
+image::https://img.shields.io/badge/License-MIT-blue[License]
+image::https://img.shields.io/badge/Julia-1.9+-9558b2[Julia]
+
+*Make your Git repositories discoverable.*
+
+== Overview
+
+Just like web SEO helps pages rank in search engines, **Git SEO** helps repositories get discovered on GitHub, GitLab, Bitbucket, and across git forges.
+
+git-seo is a CLI tool that:
+
+* **Analyzes** repository metadata, README quality, and social signals
+* **Scores** discoverability across multiple dimensions
+* **Recommends** actionable improvements
+* **Compares** repositories side-by-side
+
+== Installation
+
+[source,bash]
+----
+# Clone the repository
+git clone https://gitlab.com/hyperpolymath/git-seo.git
+cd git-seo
+
+# Install dependencies
+julia --project=. -e 'using Pkg; Pkg.instantiate()'
+
+# Run directly
+julia --project=. bin/git-seo analyze https://github.com/JuliaLang/julia
+----
+
+=== Using justfile
+
+[source,bash]
+----
+just setup    # Install dependencies
+just build    # Precompile
+just run analyze https://github.com/user/repo
+----
+
+== Usage
+
+=== Analyze a Repository
+
+[source,bash]
+----
+git-seo analyze https://github.com/JuliaLang/julia
+----
+
+Example output:
+
+[source]
+----
+Git SEO Analysis Report
+==================================================
+Repository: JuliaLang/julia
+Forge: Github
+
+Overall Score: 78.5/100 (78.5%)
+
+Category Scores
+--------------------------------------------------
+  Metadata     22.0/25.0
+  Readme       28.0/30.0
+  Social       15.5/20.0
+  Activity     10.0/15.0
+  Quality       8.0/10.0
+
+Recommendations
+--------------------------------------------------
+  1. Add more topics/tags (aim for 5-10 relevant keywords)
+----
+
+=== Compare Repositories
+
+[source,bash]
+----
+git-seo compare https://github.com/user/repo1 https://github.com/user/repo2
+----
+
+=== Get Optimization Suggestions
+
+[source,bash]
+----
+git-seo optimize https://github.com/user/repo
+----
+
+=== JSON Output (for CI/CD)
+
+[source,bash]
+----
+git-seo analyze https://github.com/user/repo --json
+----
+
+== Key SEO Factors
+
+=== Repository Metadata (25 points)
+* **Name**: Descriptive, kebab-case, keyword-rich
+* **Description**: 50-350 characters with primary keywords
+* **Topics**: 5-10 relevant tags
+* **License**: Clear SPDX-identified license
+
+=== README Quality (30 points)
+* Badges (build status, version, downloads)
+* Clear one-liner description
+* Installation instructions
+* Usage examples with code blocks
+* Screenshots/GIFs for visual projects
+
+=== Social Signals (20 points)
+* Stars, Forks, Watchers
+* Active issue discussions
+* Pull request engagement
+
+=== Activity (15 points)
+* Recent updates
+* Consistent commit history
+* Active maintenance
+
+=== Code Quality (10 points)
+* Primary language detection
+* License presence
+* Documentation structure
+
+== Supported Forges
+
+* ✅ GitHub
+* ✅ GitLab
+* ✅ Bitbucket
+* 🔜 Codeberg
+* 🔜 Gitea instances
+
+== Environment Variables
+
+[cols="1,2"]
+|===
+| Variable | Description
+
+| `GITHUB_TOKEN`
+| GitHub API token for higher rate limits
+
+| `GITLAB_TOKEN`
+| GitLab API token (for private repos)
+
+| `BITBUCKET_TOKEN`
+| Bitbucket API token
+|===
+
+== Development
+
+[source,bash]
+----
+# Enter Julia REPL with project
+just repl
+
+# Run tests
+just test
+
+# Validate RSR compliance
+just validate
+----
+
+== RSR Compliance
+
+This project follows the https://gitlab.com/hyperpolymath/rhodium-standard-repositories[Rhodium Standard Repositories] framework.
+
+[source,bash]
+----
+just validate  # Check RSR compliance
+----
+
+== Contributing
+
+See link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] for guidelines.
+
+=== Quick Contributions
+
+* 📝 Documentation improvements
+* 🐛 Bug reports
+* 💡 Feature suggestions
+* 🧪 Test cases
+
+== License
+
+MIT License - see link:LICENSE.txt[LICENSE.txt]
+
+== Links
+
+* https://gitlab.com/hyperpolymath/git-seo[GitLab Repository]
+* link:SECURITY.md[Security Policy]
+* link:CODE_OF_CONDUCT.adoc[Code of Conduct]
+* link:GOVERNANCE.adoc[Governance]

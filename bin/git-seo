@@ -1,0 +1,12 @@
+#!/usr/bin/env julia
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 hyperpolymath
+
+# Activate the project environment
+using Pkg
+script_dir = dirname(dirname(abspath(PROGRAM_FILE)))
+Pkg.activate(script_dir; io=devnull)
+
+# Load and run the CLI
+using GitSEO
+GitSEO.command_main()

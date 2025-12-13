@@ -1,0 +1,26 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Julia
+*.jl text diff=julia
+
+# Documentation
+*.md text diff=markdown
+*.adoc text
+*.txt text
+
+# Data
+*.json text
+*.yml text
+*.yaml text
+*.toml text
+
+# Scripts
+*.sh text eol=lf
+bin/* text eol=lf
+
+# Binary
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary

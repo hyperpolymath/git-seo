@@ -1,0 +1,112 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 hyperpolymath
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Julia ${{ matrix.julia-version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        julia-version:
+          - '1.9'
+          - '1.10'
+          - '1'  # Latest stable
+        os:
+          - ubuntu-latest
+          - macos-latest
+        exclude:
+          - os: macos-latest
+            julia-version: '1.9'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: ${{ matrix.julia-version }}
+
+      - name: Cache Julia packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.julia/artifacts
+            ~/.julia/packages
+            ~/.julia/compiled
+          key: julia-${{ matrix.julia-version }}-${{ hashFiles('Project.toml') }}
+          restore-keys: |
+            julia-${{ matrix.julia-version }}-
+
+      - name: Install dependencies
+        run: julia --project=. -e 'using Pkg; Pkg.instantiate()'
+
+      - name: Run tests
+        run: julia --project=. -e 'using Pkg; Pkg.test()'
+
+  lint:
+    name: SPDX & Documentation Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check SPDX headers
+        run: |
+          missing=0
+          for file in src/*.jl bin/git-seo; do
+            if ! head -3 "$file" | grep -q "SPDX-License-Identifier"; then
+              echo "::error file=$file::Missing SPDX header"
+              missing=$((missing + 1))
+            fi
+          done
+          if [ $missing -gt 0 ]; then
+            exit 1
+          fi
+          echo "All source files have SPDX headers"
+
+      - name: Check required files
+        run: |
+          required_files=(
+            "README.adoc"
+            "LICENSE.txt"
+            "SECURITY.md"
+            "CODE_OF_CONDUCT.adoc"
+            "CONTRIBUTING.adoc"
+          )
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "::error::Missing required file: $file"
+              exit 1
+            fi
+          done
+          echo "All required documentation present"
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+
+      - name: Check for hardcoded credentials
+        run: |
+          if grep -rn "password\s*=\s*['\"]" src/ bin/ 2>/dev/null; then
+            echo "::error::Potential hardcoded credentials found"
+            exit 1
+          fi
+          echo "No obvious credential leaks found"

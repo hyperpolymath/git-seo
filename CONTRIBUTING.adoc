@@ -1,0 +1,144 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2025 hyperpolymath
+= Contributing to git-seo
+:toc:
+:toclevels: 2
+
+Thank you for your interest in contributing to git-seo!
+
+== Quick Start
+
+[source,bash]
+----
+# Clone the repository
+git clone https://gitlab.com/hyperpolymath/git-seo.git
+cd git-seo
+
+# Install Julia (1.9+)
+# https://julialang.org/downloads/
+
+# Activate and instantiate the project
+julia --project=. -e 'using Pkg; Pkg.instantiate()'
+
+# Run tests
+julia --project=. -e 'using Pkg; Pkg.test()'
+----
+
+== Tri-Perimeter Contribution Framework (TPCF)
+
+git-seo uses a graduated trust model aligned with Rhodium Standard:
+
+=== 🔒 Perimeter 1: Core (Maintainers Only)
+
+* Core analysis algorithms
+* Scoring system modifications
+* Build system and CI/CD
+* Security-sensitive code
+
+=== 🧠 Perimeter 2: Expert (Trusted Contributors)
+
+* New forge integrations (Codeberg, Gitea, etc.)
+* Analysis plugins
+* CLI extensions
+* Validation rules
+
+*Requirements*: Unit tests, documentation, SPDX headers
+
+=== 🌱 Perimeter 3: Community (Open to All)
+
+* Documentation improvements
+* Bug reports and discussions
+* Test cases
+* Translation/i18n
+
+== Development Guidelines
+
+=== Code Style
+
+* Follow Julia https://docs.julialang.org/en/v1/manual/style-guide/[Style Guide]
+* Use descriptive variable names
+* Add type annotations where beneficial
+* Document public functions with docstrings
+
+=== Commit Messages
+
+Use conventional commit format:
+
+[source]
+----
+feat: add GitLab support
+fix: handle empty README gracefully
+docs: update installation instructions
+test: add scoring edge cases
+----
+
+=== SPDX Headers
+
+All source files must include SPDX headers:
+
+[source,julia]
+----
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 hyperpolymath
+----
+
+=== Testing
+
+* Write tests for new functionality
+* Ensure existing tests pass
+* Test offline scenarios where applicable
+
+[source,bash]
+----
+julia --project=. -e 'using Pkg; Pkg.test()'
+----
+
+== Pull Request Process
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feat/amazing-feature`)
+3. Make your changes
+4. Run tests locally
+5. Commit with conventional commit message
+6. Push to your fork
+7. Open a Merge Request
+
+=== MR Requirements
+
+* [ ] Tests pass
+* [ ] SPDX headers present on new files
+* [ ] Documentation updated if needed
+* [ ] No new dependencies without justification
+
+== Reporting Issues
+
+=== Bug Reports
+
+Include:
+
+* Julia version (`julia --version`)
+* Operating system
+* Steps to reproduce
+* Expected vs actual behavior
+* Relevant error messages
+
+=== Feature Requests
+
+Include:
+
+* Use case description
+* Proposed solution (if any)
+* Alternatives considered
+
+== Code of Conduct
+
+Please read and follow our link:CODE_OF_CONDUCT.adoc[Code of Conduct].
+
+== License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
+
+== Questions?
+
+* Open an issue with the `question` label
+* Email: rhodium-standard@proton.me

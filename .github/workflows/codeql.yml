@@ -1,0 +1,57 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2025 hyperpolymath
+
+name: CodeQL Security Analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run weekly on Sundays
+    - cron: '0 3 * * 0'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Note: CodeQL doesn't have native Julia support
+      # We use custom queries for security patterns
+
+      - name: Security pattern check
+        run: |
+          echo "Checking for common security anti-patterns..."
+
+          # Check for HTTP (non-HTTPS) URLs in code
+          if grep -rn "http://" src/ bin/ --include="*.jl" | grep -v "localhost\|127.0.0.1\|example.com"; then
+            echo "::warning::Found non-HTTPS URLs in source code"
+          fi
+
+          # Check for eval usage (code injection risk)
+          if grep -rn "^[^#]*eval(" src/ bin/ --include="*.jl"; then
+            echo "::warning::Found eval() usage - review for code injection risks"
+          fi
+
+          # Check for shell command execution
+          if grep -rn "^[^#]*run\s*(" src/ bin/ --include="*.jl"; then
+            echo "::warning::Found shell command execution - ensure input sanitization"
+          fi
+
+          echo "Security pattern check complete"
+
+      - name: Dependency audit
+        run: |
+          echo "Auditing dependencies..."
+          # List all dependencies for manual review
+          grep -A100 '^\[deps\]' Project.toml | grep -v '^\[' | head -20 || true
+          echo "Review dependencies for known vulnerabilities"

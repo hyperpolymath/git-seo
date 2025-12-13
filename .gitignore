@@ -1,0 +1,33 @@
+# Julia
+Manifest.toml
+*.jl.cov
+*.jl.mem
+deps/deps.jl
+deps/build.log
+
+# Build artifacts
+/build/
+/dist/
+*.tar.gz
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Coverage
+/coverage/
+lcov.info
