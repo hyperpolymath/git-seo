@@ -10,6 +10,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+
+permissions: read-all
+
 jobs:
   test:
     name: Julia ${{ matrix.julia-version }} - ${{ matrix.os }}
@@ -29,7 +32,7 @@ jobs:
             julia-version: '1.9'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Setup Julia
         uses: julia-actions/setup-julia@v2
@@ -57,7 +60,7 @@ jobs:
     name: SPDX & Documentation Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Check SPDX headers
         run: |
@@ -96,10 +99,10 @@ jobs:
     permissions:
       security-events: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Check for secrets
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@8a83df83c66e0b5c7ee6b3cd5636dd2d2c0c7c56
         with:
           extra_args: --only-verified
 
