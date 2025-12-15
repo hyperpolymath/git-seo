@@ -1,33 +1,79 @@
-# Julia
-Manifest.toml
-*.jl.cov
-*.jl.mem
-deps/deps.jl
-deps/build.log
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# RSR-compliant .gitignore
 
-# Build artifacts
-/build/
-/dist/
-*.tar.gz
-
-# IDE
-.idea/
-.vscode/
+# OS & Editor
+.DS_Store
+Thumbs.db
 *.swp
 *.swo
 *~
+.idea/
+.vscode/
 
-# OS
-.DS_Store
-Thumbs.db
+# Build
+/target/
+/_build/
+/build/
+/dist/
+/out/
+
+# Dependencies
+/node_modules/
+/vendor/
+/deps/
+/.elixir_ls/
+
+# Rust
+# Cargo.lock  # Keep for binaries
+
+# Elixir
+/cover/
+/doc/
+*.ez
+erl_crash.dump
+
+# Julia
+*.jl.cov
+*.jl.mem
+/Manifest.toml
+
+# ReScript
+/lib/bs/
+/.bsb.lock
+
+# Python (SaltStack only)
+__pycache__/
+*.py[cod]
+.venv/
+
+# Ada/SPARK
+*.ali
+/obj/
+/bin/
+
+# Haskell
+/.stack-work/
+/dist-newstyle/
+
+# Chapel
+*.chpl.tmp.*
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# Test/Coverage
+/coverage/
+htmlcov/
 
 # Logs
 *.log
+/logs/
 
-# Environment
-.env
-.env.local
-
-# Coverage
-/coverage/
-lcov.info
+# Temp
+/tmp/
+*.tmp
+*.bak
