@@ -102,7 +102,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Check for secrets
-        uses: trufflesecurity/trufflehog@8a83df83c66e0b5c7ee6b3cd5636dd2d2c0c7c56
+        uses: trufflesecurity/trufflehog@05cccb53bc9e13bc6d17997db5a6bcc3df44bf2f
         with:
           extra_args: --only-verified
 
