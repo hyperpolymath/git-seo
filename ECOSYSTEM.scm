@@ -8,7 +8,7 @@
   (version "1.0.0")
   (name "git-seo")
   (type "project")
-  (purpose "// SPDX-License-Identifier: MIT")
+  (purpose "CLI tool for analyzing Git repositories for discoverability (SEO) across GitHub, GitLab, Bitbucket, and other forges")
 
   (position-in-ecosystem
     "Part of the hyperpolymath ecosystem of tools, libraries, and specifications.
@@ -53,7 +53,10 @@
          ECOSYSTEM.scm = Project relationship format")))
 
   (what-this-is
-    "// SPDX-License-Identifier: MIT
+    "A Julia-based command-line tool that analyzes git repositories for SEO optimization.
+     Provides scoring across multiple categories: metadata, README quality, social signals,
+     activity, and code quality. Generates actionable recommendations for improving
+     repository discoverability.
 
      Design principles:
      - RSR Gold compliance target
