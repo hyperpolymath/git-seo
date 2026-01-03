@@ -1,15 +1,16 @@
+image:https://img.shields.io/badge/License-MPL_2.0-blue.svg[MPL-2.0,link="https://opensource.org/licenses/MPL-2.0"]
+image:https://img.shields.io/badge/Philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
+
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2025 hyperpolymath
 = git-seo
 
-image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"] image:https://img.shields.io/badge/philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
 :toc: left
 :toclevels: 2
 :icons: font
 :source-highlighter: rouge
 
 image::https://img.shields.io/badge/RSR-Bronze-cd7f32[RSR Compliance]
-image::https://img.shields.io/badge/License-MIT-blue[License]
 image::https://img.shields.io/badge/Julia-1.9+-9558b2[Julia]
 
 *Make your Git repositories discoverable.*
